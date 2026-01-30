@@ -20,7 +20,8 @@ dev = [
 ]
 
 [tool.setuptools]
-packages = { find = { where = ["src"], include = ["dpw*"] } }
+package-dir = { dpw = "src" }
+packages = ["dpw", "dpw.api", "dpw.cli", "dpw.feishu", "dpw.utils"]
 
 [tool.setuptools.package-data]
 dpw = ["templates/*.j2"]
