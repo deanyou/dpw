@@ -23,6 +23,19 @@ python -m pytest
 
 在 VPS 上按同样步骤创建 venv 并安装，然后直接 `pytest` 即可。
 
+## VPS 一键部署（推荐）
+
+在你本机执行一条命令即可完成 VPS 上的 clone/pull + venv + 安装（可选跑测试）：
+
+```bash
+ssh user@vps 'bash -s -- --dir /opt/dpw --repo <YOUR_GIT_URL> --branch main --run-tests' < scripts/deploy_vps.sh
+```
+
+部署完成后：
+
+- Python 解释器：`/opt/dpw/.venv/bin/python`
+- 更新：重复执行同一条命令（会自动 pull 并重装）
+
 ## 飞书→VPS→调用 dpw 的测试建议
 
 如果你的飞书 bot 是通过 `subprocess` 去调用远程 VPS 上的 `dpw`（或封装后的脚本），建议把“命令拼接/参数校验/超时/错误回传”抽成独立函数，然后：
