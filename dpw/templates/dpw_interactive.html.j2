@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 300;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .logo {
+            font-size: 2rem;
+            color: #FFF;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            height: calc(100vh - 80px);
+            gap: 0;
+        }
+
+        .specifications {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .specs-header {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 1rem;
+            margin: -2rem -2rem 2rem -2rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: white;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group input,
+        .form-group select {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        .unit {
+            color: #4CAF50;
+            font-weight: 600;
+            font-size: 0.9rem;
+            min-width: 30px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-calculate {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+        }
+
+        .btn-calculate:hover {
+            background: linear-gradient(45deg, #45a049, #4CAF50);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-reset {
+            background: linear-gradient(45deg, #9E9E9E, #757575);
+            color: white;
+        }
+
+        .btn-reset:hover {
+            background: linear-gradient(45deg, #757575, #9E9E9E);
+            transform: translateY(-2px);
+        }
+
+        .results-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-header h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .results-header .timestamp {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .wafer-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 600px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-left: 4px solid #3498db;
+        }
+
+        .stat-card.success {
+            border-left-color: #4CAF50;
+        }
+
+        .stat-card.warning {
+            border-left-color: #FF9800;
+        }
+
+        .stat-card h3 {
+            color: #2c3e50;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .stat-card.success .value {
+            color: #4CAF50;
+        }
+
+        .stat-card.warning .value {
+            color: #FF9800;
+        }
+
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        .preset-btn {
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .preset-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .wafer-visualization {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .method-selector {
+            margin-bottom: 1.5rem;
+        }
+
+        .method-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid #3498db;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #e74c3c;
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+            
+            .specifications {
+                max-height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>
+            <span class="logo">✕</span>
+            {{ page_title }}
+        </h1>
+    </div>
+
+    <div class="container">
+        <div class="specifications">
+            <div class="specs-header">Specifications</div>
+            
+            <form id="dpwForm">
+                <div class="form-group">
+                    <label for="dieX">DESIGN SIZE X</label>
+                    <div class="input-group">
+                        <input type="number" id="dieX" name="die_size_x_um" value="{{ parameters.die_size_x_um or 1000 }}" min="1" step="1">
+                        <span class="unit">μm</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="dieY">DESIGN SIZE Y</label>
+                    <div class="input-group">
+                        <input type="number" id="dieY" name="die_size_y_um" value="{{ parameters.die_size_y_um or 2000 }}" min="1" step="1">
+                        <span class="unit">μm</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="scribeX">SCRIBE LANE WIDTH X</label>
+                    <div class="input-group">
+                        <input type="number" id="scribeX" name="scribe_lane_x_um" value="{{ parameters.scribe_lane_x_um or 50 }}" min="0" step="1">
+                        <span class="unit">μm</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="scribeY">SCRIBE LANE WIDTH Y</label>
+                    <div class="input-group">
+                        <input type="number" id="scribeY" name="scribe_lane_y_um" value="{{ parameters.scribe_lane_y_um or 50 }}" min="0" step="1">
+                        <span class="unit">μm</span>
+                    </div>
+                </div>
+
+                <div class="preset-buttons">
+                    {% for preset_name, preset in scribe_presets.items() %}
+                    <button type="button" class="preset-btn" onclick="applyScribePreset('{{ preset_name }}')">
+                        {{ preset.description.split(' ')[0] }}
+                    </button>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="waferSize">WAFER SIZE</label>
+                    <div class="input-group">
+                        <select id="waferSize" name="wafer_diameter_mm">
+                            {% for preset_name, preset in wafer_presets.items() %}
+                            <option value="{{ preset.diameter_mm }}" 
+                                    data-exclusion="{{ preset.edge_exclusion_mm }}"
+                                    {{ 'selected' if preset.diameter_mm == (parameters.wafer_diameter_mm or 200) }}>
+                                {{ preset.diameter_mm }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <span class="unit">mm</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="edgeExclusion">EDGE EXCLUSION</label>
+                    <div class="input-group">
+                        <select id="edgeExclusion" name="edge_exclusion_mm">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                            <option value="5">5</option>
+                            <option value="7">7</option>
+                            <option value="10">10</option>
+                        </select>
+                        <span class="unit">mm</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="yield">YIELD</label>
+                    <div class="input-group">
+                        <input type="number" id="yield" name="yield_percentage" value="{{ parameters.yield_percentage or 100 }}" min="0" max="100" step="0.1">
+                        <span class="unit">%</span>
+                    </div>
+                </div>
+
+                <div class="form-group method-selector">
+                    <label for="validationMethod">VALIDATION METHOD</label>
+                    <select id="validationMethod" name="validation_method" onchange="updateMethodInfo()">
+                        {% for method_key, method in validation_methods.items() %}
+                        <option value="{{ method_key }}" {{ 'selected' if method_key == (parameters.validation_method or 'corner') }}>
+                            {{ method.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <div class="method-info" id="methodInfo">
+                        Select a method to see description
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="btn btn-calculate" onclick="calculateDPW()">CALCULATE</button>
+                    <button type="button" class="btn btn-reset" onclick="resetForm()">RESET</button>
+                </div>
+            </form>
+
+            <div class="error-message" id="errorMessage"></div>
+        </div>
+
+        <div class="results-panel">
+            <div class="results-header">
+                <h2>Estimated Number of Dies</h2>
+                <div class="timestamp">{{ timestamp }}</div>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div>Calculating...</div>
+            </div>
+
+            <div id="resultsContent">
+                {% if has_result %}
+                <div class="stats-grid">
+                    <div class="stat-card success">
+                        <h3>Total Dies</h3>
+                        <div class="value">{{ total_dies }}</div>
+                    </div>
+                    <div class="stat-card success">
+                        <h3>Yield Dies</h3>
+                        <div class="value">{{ yield_dies }}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Utilization</h3>
+                        <div class="value">{{ "%.1f"|format(wafer_utilization) }}%</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Method</h3>
+                        <div class="value" style="font-size: 1.2rem;">{{ method_name }}</div>
+                    </div>
+                </div>
+
+                <div class="wafer-container">
+                    {{ wafer_visualization|safe }}
+                </div>
+                {% else %}
+                <div class="wafer-container">
+                    <div class="no-results">
+                        <h3>Enter specifications and click Calculate to see results</h3>
+                        <p>Adjust the parameters on the left and click Calculate to generate your wafer map</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scribe lane presets data
+        const scribePresets = {{ scribe_presets|tojson }};
+        
+        // Validation methods data
+        const validationMethods = {{ validation_methods|tojson }};
+
+        function applyScribePreset(presetName) {
+            const preset = scribePresets[presetName];
+            if (preset) {
+                document.getElementById('scribeX').value = preset.x;
+                document.getElementById('scribeY').value = preset.y;
+            }
+        }
+
+        function updateMethodInfo() {
+            const select = document.getElementById('validationMethod');
+            const infoDiv = document.getElementById('methodInfo');
+            const method = validationMethods[select.value];
+            if (method) {
+                infoDiv.textContent = method.description;
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('dpwForm').reset();
+            document.getElementById('dieX').value = 1000;
+            document.getElementById('dieY').value = 2000;
+            document.getElementById('scribeX').value = 50;
+            document.getElementById('scribeY').value = 50;
+            document.getElementById('yield').value = 100;
+            updateMethodInfo();
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function validateForm() {
+            const form = document.getElementById('dpwForm');
+            const formData = new FormData(form);
+            
+            // Basic validation
+            const dieX = parseFloat(formData.get('die_size_x_um'));
+            const dieY = parseFloat(formData.get('die_size_y_um'));
+            const waferDiameter = parseFloat(formData.get('wafer_diameter_mm'));
+            const edgeExclusion = parseFloat(formData.get('edge_exclusion_mm'));
+            
+            if (dieX <= 0 || dieY <= 0) {
+                throw new Error('Die sizes must be positive values');
+            }
+            
+            if (edgeExclusion >= waferDiameter / 2) {
+                throw new Error('Edge exclusion cannot be larger than wafer radius');
+            }
+            
+            const diePitchX = (dieX + parseFloat(formData.get('scribe_lane_x_um'))) / 1000;
+            const diePitchY = (dieY + parseFloat(formData.get('scribe_lane_y_um'))) / 1000;
+            const effectiveDiameter = waferDiameter - 2 * edgeExclusion;
+            
+            if (diePitchX > effectiveDiameter || diePitchY > effectiveDiameter) {
+                throw new Error('Die with scribe lanes is larger than effective wafer diameter');
+            }
+            
+            return true;
+        }
+
+        function calculateDPW() {
+            try {
+                validateForm();
+                
+                // Show loading
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('resultsContent').style.display = 'none';
+                
+                // Simulate calculation (in real implementation, this would be an AJAX call)
+                setTimeout(() => {
+                    // For demo purposes, show static result
+                    // In real implementation, this would call the Python backend
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('resultsContent').style.display = 'block';
+                    
+                    // Update results would happen here via AJAX
+                    console.log('Calculation completed');
+                }, 1500);
+                
+            } catch (error) {
+                document.getElementById('loading').style.display = 'none';
+                showError(error.message);
+            }
+        }
+
+        // Update wafer size exclusion when wafer size changes
+        document.getElementById('waferSize').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const exclusion = selectedOption.getAttribute('data-exclusion');
+            if (exclusion) {
+                document.getElementById('edgeExclusion').value = exclusion;
+            }
+        });
+
+        // Initialize method info on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateMethodInfo();
+        });
+
+        // Auto-calculate on input change (with debouncing)
+        let calcTimeout;
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('input', function() {
+                clearTimeout(calcTimeout);
+                calcTimeout = setTimeout(() => {
+                    // Auto-calculate could be enabled here
+                    // calculateDPW();
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>

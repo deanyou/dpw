@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border-left: 5px solid #3498db;
+            transition: transform 0.3s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .summary-card.primary {
+            border-left-color: #e74c3c;
+        }
+
+        .summary-card.success {
+            border-left-color: #27ae60;
+        }
+
+        .summary-card.info {
+            border-left-color: #f39c12;
+        }
+
+        .summary-card h3 {
+            color: #2c3e50;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .summary-card .value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-card.primary .value {
+            color: #e74c3c;
+        }
+
+        .summary-card.success .value {
+            color: #27ae60;
+        }
+
+        .summary-card.info .value {
+            color: #f39c12;
+        }
+
+        .summary-card .unit {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .wafer-section {
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .wafer-section h2 {
+            color: #2c3e50;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+        }
+
+        .wafer-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+        }
+
+        .parameters-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .parameters-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .parameters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .param-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .param-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .param-value {
+            color: #3498db;
+            font-weight: 500;
+        }
+
+        .statistics-section {
+            margin: 3rem 0;
+        }
+
+        .statistics-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .stat-group {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-group h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .suggestions-section {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .suggestions-section h2 {
+            margin-bottom: 1rem;
+        }
+
+        .suggestion-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-left: 4px solid #fff;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .parameters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ page_title }}</h1>
+            <div class="subtitle">Generated on {{ timestamp }}</div>
+        </div>
+
+        <div class="content">
+            <!-- Summary Cards -->
+            <div class="summary-grid">
+                <div class="summary-card primary">
+                    <h3>Total Dies</h3>
+                    <div class="value">{{ "{:,}".format(total_dies) }}</div>
+                    <div class="unit">dies</div>
+                </div>
+                <div class="summary-card success">
+                    <h3>Yield Dies</h3>
+                    <div class="value">{{ "{:,}".format(yield_dies) }}</div>
+                    <div class="unit">dies</div>
+                </div>
+                <div class="summary-card info">
+                    <h3>Wafer Utilization</h3>
+                    <div class="value">{{ "%.1f"|format(wafer_utilization) }}</div>
+                    <div class="unit">%</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Validation Method</h3>
+                    <div class="value" style="font-size: 1.8rem;">{{ method_name }}</div>
+                    <div class="unit">algorithm</div>
+                </div>
+            </div>
+
+            <!-- Wafer Visualization -->
+            <div class="wafer-section">
+                <h2>Wafer Map Visualization</h2>
+                <div class="wafer-container">
+                    {{ wafer_visualization|safe }}
+                </div>
+            </div>
+
+            <!-- Parameters Used -->
+            <div class="parameters-section">
+                <h2>Calculation Parameters</h2>
+                <div class="parameters-grid">
+                    <div class="param-item">
+                        <span class="param-label">Die Size X:</span>
+                        <span class="param-value">{{ "{:,}".format(parameters.die_size_x_um|int) }} μm</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Die Size Y:</span>
+                        <span class="param-value">{{ "{:,}".format(parameters.die_size_y_um|int) }} μm</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Scribe Lane X:</span>
+                        <span class="param-value">{{ parameters.scribe_lane_x_um }} μm</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Scribe Lane Y:</span>
+                        <span class="param-value">{{ parameters.scribe_lane_y_um }} μm</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Wafer Diameter:</span>
+                        <span class="param-value">{{ parameters.wafer_diameter_mm }} mm</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Edge Exclusion:</span>
+                        <span class="param-value">{{ parameters.edge_exclusion_mm }} mm</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Yield:</span>
+                        <span class="param-value">{{ parameters.yield_percentage }}%</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Method:</span>
+                        <span class="param-value">{{ calculation_method.replace('_', ' ').title() }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Statistics -->
+            {% if detailed_stats %}
+            <div class="statistics-section">
+                <h2>Detailed Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-group">
+                        <h3>Wafer Areas</h3>
+                        <div class="stat-row">
+                            <span>Total Wafer Area:</span>
+                            <span>{{ "%.1f"|format(detailed_stats.wafer_area_mm2) }} mm²</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Effective Area:</span>
+                            <span>{{ "%.1f"|format(detailed_stats.effective_area_mm2) }} mm²</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Edge Exclusion Area:</span>
+                            <span>{{ "%.1f"|format(detailed_stats.edge_exclusion_area_mm2) }} mm²</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-group">
+                        <h3>Die Specifications</h3>
+                        <div class="stat-row">
+                            <span>Die Area:</span>
+                            <span>{{ "%.4f"|format(detailed_stats.die_area_mm2) }} mm²</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Die Pitch Area:</span>
+                            <span>{{ "%.4f"|format(detailed_stats.die_pitch_mm2) }} mm²</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Area Efficiency:</span>
+                            <span>{{ "%.2f"|format(detailed_stats.area_efficiency) }}%</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-group">
+                        <h3>Performance Metrics</h3>
+                        <div class="stat-row">
+                            <span>Dies per cm²:</span>
+                            <span>{{ "%.1f"|format(detailed_stats.dies_per_cm2) }}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Max Distance from Center:</span>
+                            <span>{{ "%.2f"|format(detailed_stats.max_distance_from_center) }} mm</span>
+                        </div>
+                        <div class="stat-row">
+                            <span>Edge Loss:</span>
+                            <span>{{ "%.2f"|format(detailed_stats.edge_loss_percentage) }}%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Optimization Suggestions -->
+            {% if optimization_suggestions %}
+            <div class="suggestions-section">
+                <h2>💡 Optimization Suggestions</h2>
+                {% for suggestion in optimization_suggestions %}
+                <div class="suggestion-item">
+                    {{ suggestion }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="footer">
+            Generated by PyEDA Die Per Wafer Calculator • {{ timestamp }}
+        </div>
+    </div>
+</body>
+</html>

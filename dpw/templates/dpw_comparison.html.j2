@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page_title }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #8e44ad 0%, #3498db 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 300;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 2rem;
+        }
+
+        .comparison-overview {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .comparison-overview h2 {
+            margin-bottom: 1rem;
+        }
+
+        .overview-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .overview-stat {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .overview-stat .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .overview-stat .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .methods-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .method-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .method-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .method-header {
+            padding: 1.5rem;
+            color: white;
+            text-align: center;
+        }
+
+        .method-header.center {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .method-header.corner {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .method-header.area {
+            background: linear-gradient(135deg, #27ae60, #229954);
+        }
+
+        .method-header.strict {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+
+        .method-header h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .method-header .description {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .method-stats {
+            padding: 1.5rem;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        .comparison-table {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin: 3rem 0;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .table-content {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        td {
+            color: #34495e;
+        }
+
+        .best-value {
+            background: #d5f4e6;
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .visualization-section {
+            margin: 3rem 0;
+            text-align: center;
+        }
+
+        .visualization-section h2 {
+            color: #2c3e50;
+            margin-bottom: 2rem;
+        }
+
+        .comparison-viz {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 400px;
+        }
+
+        .parameters-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .parameters-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .parameters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .param-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .param-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .param-value {
+            color: #3498db;
+            font-weight: 500;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .recommendations h2 {
+            margin-bottom: 1rem;
+        }
+
+        .recommendation-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-left: 4px solid #fff;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            background: #ecf0f1;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .methods-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .overview-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .parameters-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ page_title }}</h1>
+            <div class="subtitle">Method Comparison Analysis • Generated on {{ timestamp }}</div>
+        </div>
+
+        <div class="content">
+            <!-- Comparison Overview -->
+            {% if comparison_stats %}
+            <div class="comparison-overview">
+                <h2>📊 Comparison Overview</h2>
+                <p>Analysis of {{ comparison_results|length }} validation methods</p>
+                <div class="overview-stats">
+                    <div class="overview-stat">
+                        <div class="label">Die Count Range</div>
+                        <div class="value">{{ "{:,}".format(comparison_stats.die_count_range) }}</div>
+                    </div>
+                    <div class="overview-stat">
+                        <div class="label">Min Dies</div>
+                        <div class="value">{{ "{:,}".format(comparison_stats.min_dies) }}</div>
+                    </div>
+                    <div class="overview-stat">
+                        <div class="label">Max Dies</div>
+                        <div class="value">{{ "{:,}".format(comparison_stats.max_dies) }}</div>
+                    </div>
+                    <div class="overview-stat">
+                        <div class="label">Utilization Range</div>
+                        <div class="value">{{ "%.1f"|format(comparison_stats.utilization_range) }}%</div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Method Cards -->
+            <div class="methods-comparison">
+                {% for method_key, result in comparison_results.items() %}
+                <div class="method-card">
+                    <div class="method-header {{ method_key }}">
+                        <h3>{{ result.method_name }}</h3>
+                        <div class="description">{{ result.method_description }}</div>
+                    </div>
+                    <div class="method-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Dies:</span>
+                            <span class="stat-value">{{ "{:,}".format(result.total_dies) }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Yield Dies:</span>
+                            <span class="stat-value">{{ "{:,}".format(result.yield_dies) }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Utilization:</span>
+                            <span class="stat-value">{{ "%.1f"|format(result.wafer_utilization) }}%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Valid Positions:</span>
+                            <span class="stat-value">{{ result.valid_die_positions|length }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="comparison-table">
+                <div class="table-header">
+                    <h2>📋 Detailed Comparison Table</h2>
+                </div>
+                <div class="table-content">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Validation Method</th>
+                                <th>Total Dies</th>
+                                <th>Yield Dies</th>
+                                <th>Utilization (%)</th>
+                                <th>Valid Positions</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% set max_dies = comparison_results.values() | map(attribute='total_dies') | max %}
+                            {% set max_util = comparison_results.values() | map(attribute='wafer_utilization') | max %}
+                            {% for method_key, result in comparison_results.items() %}
+                            <tr>
+                                <td><strong>{{ result.method_name }}</strong></td>
+                                <td class="{{ 'best-value' if result.total_dies == max_dies }}">{{ "{:,}".format(result.total_dies) }}</td>
+                                <td>{{ "{:,}".format(result.yield_dies) }}</td>
+                                <td class="{{ 'best-value' if result.wafer_utilization == max_util }}">{{ "%.1f"|format(result.wafer_utilization) }}%</td>
+                                <td>{{ result.valid_die_positions|length }}</td>
+                                <td>{{ result.method_description }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Visualization -->
+            {% if comparison_visualization %}
+            <div class="visualization-section">
+                <h2>🎯 Comparison Visualization</h2>
+                <div class="comparison-viz">
+                    {{ comparison_visualization|safe }}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Parameters Used -->
+            <div class="parameters-section">
+                <h2>⚙️ Calculation Parameters</h2>
+                <div class="parameters-grid">
+                    <div class="param-item">
+                        <span class="param-label">Die Size X:</span>
+                        <span class="param-value">{{ "{:,}".format(parameters.die_size_x_um|int) }} μm</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Die Size Y:</span>
+                        <span class="param-value">{{ "{:,}".format(parameters.die_size_y_um|int) }} μm</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Scribe Lane X:</span>
+                        <span class="param-value">{{ parameters.scribe_lane_x_um }} μm</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Scribe Lane Y:</span>
+                        <span class="param-value">{{ parameters.scribe_lane_y_um }} μm</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Wafer Diameter:</span>
+                        <span class="param-value">{{ parameters.wafer_diameter_mm }} mm</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Edge Exclusion:</span>
+                        <span class="param-value">{{ parameters.edge_exclusion_mm }} mm</span>
+                    </div>
+                    <div class="param-item">
+                        <span class="param-label">Yield:</span>
+                        <span class="param-value">{{ parameters.yield_percentage }}%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            {% if comparison_stats %}
+            <div class="recommendations">
+                <h2>🎯 Recommendations</h2>
+                <div class="recommendation-item">
+                    <strong>Recommended Method:</strong> {{ comparison_stats.recommended_method.replace('_', ' ').title() }}
+                </div>
+                <div class="recommendation-item">
+                    <strong>Most Conservative:</strong> Center-based validation provides the most conservative die count estimate
+                </div>
+                <div class="recommendation-item">
+                    <strong>Industry Standard:</strong> Corner-based validation is widely used in semiconductor manufacturing
+                </div>
+                <div class="recommendation-item">
+                    <strong>Most Optimistic:</strong> Area-based validation may provide higher die counts for edge positions
+                </div>
+                <div class="recommendation-item">
+                    <strong>Highest Precision:</strong> Strict validation ensures complete die containment within wafer boundaries
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="footer">
+            Generated by PyEDA Die Per Wafer Calculator • {{ timestamp }}
+        </div>
+    </div>
+</body>
+</html>
