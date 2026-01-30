@@ -19,6 +19,12 @@ dev = [
   "pytest>=7.0",
 ]
 
+feishu = [
+  "fastapi>=0.110",
+  "uvicorn>=0.23",
+  "requests>=2.31",
+]
+
 [tool.setuptools]
 package-dir = { dpw = "src" }
 packages = ["dpw", "dpw.api", "dpw.cli", "dpw.feishu", "dpw.utils"]

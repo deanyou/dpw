@@ -36,6 +36,36 @@ ssh user@vps 'bash -s -- --dir /opt/dpw --repo <YOUR_GIT_URL> --branch main --ru
 - Python 解释器：`/opt/dpw/.venv/bin/python`
 - 更新：重复执行同一条命令（会自动 pull 并重装）
 
+## 飞书应用机器人（事件回调）调用 dpw（纯文本命令、无加密/校验）
+
+1) 在飞书开放平台应用里订阅事件 `im.message.receive_v1`，回调地址指向你的 VPS：
+   - `https://<your-domain>/feishu/callback`
+2) 在 VPS 安装依赖并启动回调服务：
+
+```bash
+cd /opt/dpw
+/opt/dpw/.venv/bin/python -m pip install -e ".[feishu]"
+export FEISHU_APP_ID="xxx"
+export FEISHU_APP_SECRET="yyy"
+/opt/dpw/.venv/bin/python -m uvicorn scripts.feishu_dpw_bot:app --host 0.0.0.0 --port 8000
+```
+
+3) 飞书里发纯文本命令：
+
+```text
+dpw 200 1000x2000 scribe=50x50 edge=3 yield=80 method=corner notch=none
+```
+
+参数说明：
+- `wafer_mm`：晶圆直径（mm）
+- `die_x_um x die_y_um`：die 尺寸（um）
+- `scribe=AxB`：scribe（um，可选）
+- `edge=`：edge exclusion（mm，可选）
+- `yield=`：0-100（可选）
+- `method=`：`center|corner|area|strict`（可选）
+- `notch=`：`none|v90|flat`（可选）
+- `notch_depth=`：mm（可选）
+
 ## 飞书→VPS→调用 dpw 的测试建议
 
 如果你的飞书 bot 是通过 `subprocess` 去调用远程 VPS 上的 `dpw`（或封装后的脚本），建议把“命令拼接/参数校验/超时/错误回传”抽成独立函数，然后：
