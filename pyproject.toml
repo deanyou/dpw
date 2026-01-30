@@ -20,7 +20,7 @@ dev = [
 ]
 
 [tool.setuptools]
-packages = { find = { include = ["dpw*"] } }
+packages = { find = { where = ["src"], include = ["dpw*"] } }
 
 [tool.setuptools.package-data]
 dpw = ["templates/*.j2"]
