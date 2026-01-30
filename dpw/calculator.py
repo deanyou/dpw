@@ -663,6 +663,24 @@ class DieCalculator:
         Returns:
             CalculationResult with detailed results
         """
+        errors = []
+        if die_size_x_um <= 0:
+            errors.append("die_size_x_um must be positive")
+        if die_size_y_um <= 0:
+            errors.append("die_size_y_um must be positive")
+        if scribe_lane_x_um < 0:
+            errors.append("scribe_lane_x_um must be non-negative")
+        if scribe_lane_y_um < 0:
+            errors.append("scribe_lane_y_um must be non-negative")
+        if wafer_diameter_mm <= 0:
+            errors.append("wafer_diameter_mm must be positive")
+        if edge_exclusion_mm < 0:
+            errors.append("edge_exclusion_mm must be non-negative")
+        if not (0.0 <= yield_percentage <= 100.0):
+            errors.append("yield_percentage must be between 0 and 100")
+        if errors:
+            raise ValueError("; ".join(errors))
+
         # Convert units to millimeters for consistency
         die_size_x_mm = die_size_x_um / 1000.0
         die_size_y_mm = die_size_y_um / 1000.0
@@ -672,6 +690,9 @@ class DieCalculator:
         # Calculate die pitch (die + scribe lane)
         die_pitch_x_mm = die_size_x_mm + scribe_lane_x_mm
         die_pitch_y_mm = die_size_y_mm + scribe_lane_y_mm
+
+        if die_pitch_x_mm <= 0 or die_pitch_y_mm <= 0:
+            raise ValueError("die pitch must be positive (die size + scribe lane)")
         
         self.logger.info(f"Calculating DPW: Die {die_size_x_um}×{die_size_y_um}μm, "
                         f"Scribe {scribe_lane_x_um}×{scribe_lane_y_um}μm, "
