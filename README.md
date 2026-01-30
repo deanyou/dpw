@@ -66,6 +66,20 @@ dpw 200 1000x2000 scribe=50x50 edge=3 yield=80 method=corner notch=none
 - `notch=`：`none|v90|flat`（可选）
 - `notch_depth=`：mm（可选）
 
+## clawdbot 调用 dpw（推荐：直接执行命令回传 stdout）
+
+VPS 上安装完成后，用固定解释器直接跑模块：
+
+```bash
+/opt/dpw/.venv/bin/python -m dpw 200 1000x2000 scribe=50x50 edge=3 yield=80 method=corner notch=none
+```
+
+如果 clawdbot 需要结构化结果，追加 `--json`：
+
+```bash
+/opt/dpw/.venv/bin/python -m dpw --json 200 1000x2000 scribe=50x50 edge=3 yield=80 method=corner notch=none
+```
+
 ## 飞书→VPS→调用 dpw 的测试建议
 
 如果你的飞书 bot 是通过 `subprocess` 去调用远程 VPS 上的 `dpw`（或封装后的脚本），建议把“命令拼接/参数校验/超时/错误回传”抽成独立函数，然后：
