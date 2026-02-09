@@ -17,6 +17,8 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "pytest>=7.0",
+  "pytest-cov>=4.0",
+  "hypothesis>=6.0",
 ]
 
 feishu = [
@@ -26,8 +28,8 @@ feishu = [
 ]
 
 [tool.setuptools]
-package-dir = { dpw = "src" }
-packages = ["dpw", "dpw.api", "dpw.cli", "dpw.feishu", "dpw.utils"]
+package-dir = {"" = "src"}
+packages = ["dpw"]
 
 [tool.setuptools.package-data]
 dpw = ["templates/*.j2"]

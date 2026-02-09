@@ -6,8 +6,12 @@ import sys
 from dataclasses import asdict
 from typing import Any, Dict, List, Optional, Tuple
 
-from .calculator import DieCalculator, NotchType, ValidationMethod
-from .optimized_calculator import OptimizedDieCalculator
+from .calculator import (
+    DieCalculator,
+    NotchType,
+    ValidationMethod,
+    OptimizedDieCalculator,
+)
 
 
 def _parse_pair(value: str, what: str) -> Tuple[float, float]:
@@ -15,7 +19,9 @@ def _parse_pair(value: str, what: str) -> Tuple[float, float]:
         left, right = value.lower().split("x", 1)
         return float(left), float(right)
     except Exception:
-        raise argparse.ArgumentTypeError(f"{what} must be like AxB (e.g. 1000x2000), got: {value!r}")
+        raise argparse.ArgumentTypeError(
+            f"{what} must be like AxB (e.g. 1000x2000), got: {value!r}"
+        )
 
 
 def _parse_kv_tokens(tokens: List[str]) -> Dict[str, str]:
@@ -29,7 +35,9 @@ def _parse_kv_tokens(tokens: List[str]) -> Dict[str, str]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(prog="dpw", description="Die per wafer calculator (CLI)")
+    p = argparse.ArgumentParser(
+        prog="dpw", description="Die per wafer calculator (CLI)"
+    )
     p.add_argument(
         "command",
         nargs="*",
@@ -113,4 +121,3 @@ def run(argv: List[str]) -> int:
 
 def main() -> None:
     raise SystemExit(run(sys.argv[1:]))
-

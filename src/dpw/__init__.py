@@ -8,14 +8,13 @@ from .calculator import (
     NotchType,
     CalculationResult,
     DiePosition,
+    OptimizedDieCalculator,
 )
-
-from .optimized_calculator import OptimizedDieCalculator
 
 __all__ = [
     "DieCalculator",
     "OptimizedDieCalculator",
-    "ValidationMethod", 
+    "ValidationMethod",
     "NotchType",
     "CalculationResult",
     "DiePosition",
