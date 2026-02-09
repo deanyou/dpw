@@ -5,12 +5,6 @@ dpw_calculator.egg-info/SOURCES.txt
 dpw_calculator.egg-info/dependency_links.txt
 dpw_calculator.egg-info/requires.txt
 dpw_calculator.egg-info/top_level.txt
-src/__init__.py
-src/__main__.py
-src/calculator.py
-src/config.py
-src/reporter.py
-src/visualizer.py
 src/api/__init__.py
 src/cli/__init__.py
 src/feishu/__init__.py
